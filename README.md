@@ -1,31 +1,46 @@
-## Creación del Dockerfile
+## Instalación de Jenkins in Docker
 
-### Generar el JAR del proyecto Spring Boot
-```declarative
-mvn clean package -DskipTests
+### Paso 1: Descargar la imagen oficial de Jenkins
 ```
-- -DskipTests : Omite la ejecución de las pruebas
-
-### Verificar que el JAR se haya creado correctamente
-```declarative  
-ls target/
-```
-### Verificar que el JAR se ejecute correctamente
-```declarative  
-java -jar target/nombre-del-archivo.jar 
+docker pull jenkins/jenkins:lts-jdk17
 ```
 
-### Crea la imagen
+### Paso 2: Crear un contenedor de Jenkins
 ```
-docker build -t user-service:1.0 .
-```
-
-### Ejecutar el contenedor
-```
-docker run -d -p 8081:8081 --name user-service user-service:1.0
+docker run -d  -p 8080:8080  -p 50000:50000  -v jenkins_home:/var/jenkins_home  --name jenkins  jenkins/jenkins:jdk17
 ```
 
-### Verificar que el contenedor falla porque no existe la base de datos
+### Paso 3: Acceder a Jenkins
+Ingresa a  http://localhost:8080/
+
+### Paso 4: Obtener la contraseña inicial
 ```
-docker logs -f user-service
+docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
+
+### Paso 5: Completar la configuración inicial
+- Ingresa la contraseña obtenida en el paso anterior.
+- Selecciona "Instalar los complementos recomendados".
+- Crea el primer usuario administrador.
+
+### Paso 6: Installar maven en el Contenedor de Jenkins
+```
+docker exec -u root -it jenkins bash
+apt update
+apt install maven -y
+```
+
+### Paso 7: Donde estan instalados Java, Maven y git en el contenedor de Jenkins
+```
+dirname $(dirname $(readlink -f $(which java)))
+dirname $(dirname $(readlink -f $(which mvn)))
+which git
+
+```
+
+### Paso 8: Configurar Jenkins Tools
+Ingresar a "Administrar Jenkins" -> "Configurar el sistema" -> "Herramientas Globales"
+
+<img src="images/jenkins_tools_1.png" alt="Jenkins Tools" width="600"/>
+<img src="images/jenkins_tools_2.png" alt="Jenkins Tools" width="600"/>
+<img src="images/jenkins_tools_3.png" alt="Jenkins Tools" width="600"/>
