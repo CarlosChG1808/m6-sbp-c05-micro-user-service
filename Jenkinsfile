@@ -20,5 +20,20 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Package') {
+            steps {
+                echo 'Package the project'
+                sh 'mvn package -DskipTests'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build completed successfully!'
+        }
+        failure {
+            echo 'Build failed. Please check the logs.'
+        }
     }
 }
