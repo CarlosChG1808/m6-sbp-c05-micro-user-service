@@ -51,7 +51,7 @@ class UserServiceTest {
         assertNotNull(realUser);
 
         // hope values, real values
-        assertEquals(ID, realUser.getId());
+        assertEquals(1000, realUser.getId());
         assertEquals(NAME, realUser.getName());
         assertEquals(EMAIL, realUser.getEmail());
 
