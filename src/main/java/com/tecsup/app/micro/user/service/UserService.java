@@ -22,8 +22,8 @@ public class UserService {
 
         UserEntity entity = userRepository.findById(id).orElse(null);
 
-        // return  mapper.toDomain(entity);
-        return null; // para robar error en jenkins
+        return  mapper.toDomain(entity);
+        //return null; // para robar error en jenkins
     }
 
     public List<User> getAllUsers() {
